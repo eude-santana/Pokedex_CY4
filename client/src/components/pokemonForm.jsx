@@ -1,11 +1,17 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useParams, useNavigate } from "react-router-dom";
 
-import { createPokemon } from "../services/pokemonService";
+import { createPokemon, getPokemon, updatePokemon } from "../services/pokemonService";
 
 
 export default function PokemonForm() {
- const { register, handleSubmit, reset } = useForm();
+const { register, handleSubmit, reset, setValue } = useForm();
+const { id } = useParams();
+const navigate = useNavigate();
+
+
 
 
  const { mutate: create } = useMutation({
@@ -13,6 +19,7 @@ export default function PokemonForm() {
    onSuccess: () => {
      alert("Pokemon cadastrado com sucesso!");
      reset();
+    navigate("/");
    },
    onError: () => {
      alert("Erro ao cadastrar Pokemon");
@@ -20,9 +27,44 @@ export default function PokemonForm() {
  });
 
 
- function onSubmit(data) {
-   create(data);
- }
+const { mutate: update } = useMutation({
+  mutationFn: ({id, data}) => updatePokemon(id, data),
+  onSuccess: () => {
+    alert("Pokemon editado com sucesso!");
+    reset();
+    navigate("/");
+
+
+  },
+  onError: () => {
+    alert("Erro ao editar Pokemon");
+  },
+});
+
+function onSubmit(data) {
+  if (id) {
+    update({id, data});
+  } else {
+    create(data);
+  }
+}
+
+
+const { data } = useQuery({
+  queryKey: ["pokemon", id],
+  queryFn: () => getPokemon(id),
+  enabled: !!id
+});
+
+
+useEffect(() => {
+  if (data) {
+    setValue("name", data.name);
+    setValue("type", data.type.join(", "));
+    setValue("level", data.level);
+  }
+}, [data, setValue]);
+
 
  return (
    <form

@@ -18,6 +18,31 @@ async function createPokemon(req, res) {
  }
 }
 
+async function getPokemonById(req, res) {
+
+  try {
+
+    const pokemon = await Pokemon.findById(req.params.id);
+
+    if (!pokemon) {
+
+      return res.status(404).json({
+        mensagem: "Pokemon não encontrado."
+      });
+
+    }
+
+    res.status(200).json(pokemon);
+
+  } catch (error) {
+
+    res.status(400).json({
+      erro: error.message
+    });
+
+  }
+}
+
 async function listPokemon(req, res) {
  try {
   const { name, type, minLevel, sortBy, order = "asc", page = 1, limit = 10 } = req.query;
@@ -70,4 +95,4 @@ async function deletePokemon(req, res) {
  }
 }
 
-module.exports = { createPokemon, listPokemon, updatePokemon, deletePokemon };
+module.exports = { createPokemon, listPokemon, updatePokemon, deletePokemon, getPokemonById };
