@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import PokemonList from './pages/PokemonList'
+import PokemonForm from './components/pokemonForm'
 
 export default function App() {
   return (

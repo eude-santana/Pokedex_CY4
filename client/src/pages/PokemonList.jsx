@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { listPokemon } from '../../services/pokemonService'
+import { listPokemon } from '../services/pokemonService'
 
 export default function PokemonList() {
   const { data, isLoading, error } = useQuery({

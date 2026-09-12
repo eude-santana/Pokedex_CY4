@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 
-import { createPokemon } from "../../services/pokemonService";
+import { createPokemon } from "../services/pokemonService";
 
 
 export default function PokemonForm() {
